@@ -1,0 +1,30 @@
+/* app.overlay - Configuration minimale */
+/ {
+	aliases {
+		/* On donne un nom simple pour récupérer le SPI dans le code */
+		nfc-spi = &spi2;
+	};
+};
+
+&spi2 {
+	status = "okay";
+	/* On configure les pins SCK, MISO, MOSI */
+	pinctrl-0 = <&spi2_sck_pi1 &spi2_miso_pb14 &spi2_mosi_pb15>;
+	pinctrl-names = "default";
+};
+
+&pinctrl {
+	spi2_sck_pi1: spi2_sck_pi1 {
+		pinmux = <STM32_PINMUX('I', 1, AF5)>;
+		bias-pull-down;
+	};
+	spi2_miso_pb14: spi2_miso_pb14 {
+		pinmux = <STM32_PINMUX('B', 14, AF5)>;
+		bias-pull-down;
+	};
+	spi2_mosi_pb15: spi2_mosi_pb15 {
+		pinmux = <STM32_PINMUX('B', 15, AF5)>;
+		bias-pull-down;
+	};
+};
+

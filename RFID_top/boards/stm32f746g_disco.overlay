@@ -1,0 +1,45 @@
+/* STM32F746G-DISCO : Overlay Nettoyé pour Contrôle Manuel */
+
+&spi2 {
+	status = "okay";
+    /* IMPORTANT : Pas de cs-gpios ici, on le gère dans le code C */
+
+	pn532: pn532@0 {
+		compatible = "zephyr,spi-device";
+		reg = <0>;
+		spi-max-frequency = <250000>; /* 250 kHz (Vital pour F7) */
+		label = "PN532";
+	};
+};
+
+/* Le reste (I2C, SD...) ne change pas */
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+    lcd0: lcd@27 {
+        compatible = "i2c-device";
+        reg = <0x27>;
+        label = "LCD_I2C";
+    };
+    bme680: bme680@76 {
+        compatible = "bosch,bme680";
+        reg = <0x76>; 
+        label = "BME680";
+    };
+};
+
+/ {
+    aliases {
+        sdhc0 = &sdmmc1;
+    };
+};
+
+&sdmmc1 {
+    status = "okay";
+    pinctrl-0 = <&sdmmc1_d0_pc8 &sdmmc1_d1_pc9 &sdmmc1_d2_pc10 &sdmmc1_d3_pc11 &sdmmc1_ck_pc12 &sdmmc1_cmd_pd2>;
+    pinctrl-names = "default";
+    /delete-property/ cd-gpios;
+    bus-width = <1>;
+    /delete-property/ dmas;
+    /delete-property/ dma-names;
+};
